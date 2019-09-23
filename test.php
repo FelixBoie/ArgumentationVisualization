@@ -16,7 +16,9 @@ $mystring = end($parts);
 echo $mystring;
 
 echo "<br><br>";
-runArgument($question_url, $dependecy, $level, $argNr);
+$obj = runArgument($question_url, $dependecy, $level, $argNr);
+
+echo "$obj";
 
 function runArgument($question_url, $dependecy, $level, $argNr) {
     $data = file_get_contents($question_url);
@@ -44,12 +46,15 @@ function runArgument($question_url, $dependecy, $level, $argNr) {
     $arguments = $decode['mainEntity']['suggestedAnswer'];
     foreach ($arguments as $argument) {
         $argNr++;
+        $int = 0;
         // echo "NUMBERRRRRRR: $argNr <br>";
         $text = $argument['text'];
         $myObj->title = substr($text,5);
         $myObj->procon = substr($text, 0,3);
         $myObj->score = $argument['upvoteCount'];
         $myObj->reference = substr(explode('active=', $argument['url'], 2)[1],1);
+
+        $nextSite = $myObj->reference;
         
         $question_url2 = "https://www.kialo.com/$myObj->reference";
         $data = file_get_contents($question_url2);
@@ -60,22 +65,20 @@ function runArgument($question_url, $dependecy, $level, $argNr) {
         $decode = json_decode($json, true);
         $arguments = $decode['mainEntity']['suggestedAnswer'];
         foreach ($arguments as $argument) {
-            $int = 0;
+            // $myObj->arg[]= runArgument("https://www.kialo.com/extSite", $dependecy, $level++ , $argNr);
+           
+
             $text = $argument['text'];
-            $myObj2->title = substr($text,5);
-            $myObj2->procon = substr($text, 0,3);
-            $myObj2->score = $argument['upvoteCount'];
-            $myObj2->reference = substr(explode('active=', $argument['url'], 2)[1],1);
-            $myObj->argument[$int] = $myObj2;
-            $int++;
+            $myObj->arg[]->title = substr($text,5);
+            $myObj->arg[]->procon = substr($text, 0,3);
+            $myObj->arg[]->score = $argument['upvoteCount'];
+            $myObj->arg[]->reference = substr(explode('active=', $argument['url'], 2)[1],1);
+            $myJSON = json_encode($myObj);
+            echo "$myJSON";
         }
-
-        $myJSON = json_encode($myObj);
-        echo $myJSON;
-        echo "<br>";
-
-        // runArgument("https://www.kialo.com/$reference", $dependecy, $level++ , $argNr);
+        
     }
+    return $myObj;
 }
 
 
