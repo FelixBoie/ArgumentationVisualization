@@ -58,22 +58,26 @@ function runArgument($question_url, $dependecy, $level, $argNr) {
         $json = $matches[1][0];
         $decode = json_decode($json, true);
         $childs = $decode['mainEntity']['suggestedAnswer'];
-        $children = null;
-        // $myObj->child[]
+        $myObj->numberOfChildren = sizeOf($childs);
+        $childinner = []; 
+        $int = 0;
         foreach ($childs as $child) {
-            
             $text2 = $child['text'];
-            $children->title = substr($text2,5);
+            $children->title = substr(str_replace('"', "", $text2),5);
+            echo "$children->title";
+
             $children->procon = substr($text2, 0,3);
             $children->score = $child['upvoteCount'];
             $children->answerCount = $child['answerCount'];
             $children->calculatedScore = 0;
             $children->mined = 0;
-            $childinner[] = $children;
+            $childinner[$int] = json_decode(json_encode($children));
+            $int++;
         }
 
+        // echo json_encode($childinner);
         $myObj->child = $childinner;
-        echo json_encode($myObj);
+        // echo json_encode($myObj);
         echo "<br>";
         
         // echo json_encode($myObj);
