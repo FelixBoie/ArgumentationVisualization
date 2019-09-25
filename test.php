@@ -31,54 +31,41 @@ function runArgument($question_url, $dependecy, $level, $argNr) {
     echo("<pre>\n");
     $json = $matches[1][0];
 
-    // echo "$json";
-    // echo "<br><br>";
-
     $decode = json_decode($json, true);
-    // echo $json;
-
-    // $title = $decode['mainEntity']['text'];
-    // echo "<br>";
-    // echo $title;
-    // echo "<br>";
-    // echo $url = substr(explode('active=', $argument['url'], 2)[1],1);
 
     $arguments = $decode['mainEntity']['suggestedAnswer'];
+
+    if (sizeOf($arguments) == 0) {
+        return $myObj;
+    }
+
     foreach ($arguments as $argument) {
         $argNr++;
         $int = 0;
-        // echo "NUMBERRRRRRR: $argNr <br>";
         $text = $argument['text'];
         $myObj->title = substr($text,5);
         $myObj->procon = substr($text, 0,3);
         $myObj->score = $argument['upvoteCount'];
         $myObj->reference = substr(explode('active=', $argument['url'], 2)[1],1);
-
+        $myObj->answerCount - 
         $nextSite = $myObj->reference;
+        // echo json_encode($myObj);
+        // echo "<br>";
         
         $question_url2 = "https://www.kialo.com/$myObj->reference";
         $data = file_get_contents($question_url2);
         $pattern = '{<script id="metadata-qapage" type="application/ld.json" data-react-helmet="true">(.*)</script>}';
         $matchcount = preg_match_all($pattern, $data, $matches);
-        echo("<pre>\n");
         $json = $matches[1][0];
         $decode = json_decode($json, true);
-        $arguments = $decode['mainEntity']['suggestedAnswer'];
-        foreach ($arguments as $argument) {
-            // $myObj->arg[]= runArgument("https://www.kialo.com/extSite", $dependecy, $level++ , $argNr);
-           
-
-            $text = $argument['text'];
-            $myObj->arg[]->title = substr($text,5);
-            $myObj->arg[]->procon = substr($text, 0,3);
-            $myObj->arg[]->score = $argument['upvoteCount'];
-            $myObj->arg[]->reference = substr(explode('active=', $argument['url'], 2)[1],1);
-            $myJSON = json_encode($myObj);
-            echo "$myJSON";
+        $childs = $decode['mainEntity']['suggestedAnswer'];
+        foreach ($childs as $child) {
+            $myObj->arg[]= runArgument("https://www.kialo.com/$nextSite", $dependecy, $level++ , $argNr);
         }
-        
+        echo json_encode($myObj);
+        echo "<br>";
     }
-    return $myObj;
+    
 }
 
 
