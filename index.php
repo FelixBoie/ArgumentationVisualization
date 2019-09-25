@@ -63,7 +63,11 @@ function runArgument($question_url, $dependecy, $level, $argNr) {
         $int = 0;
         foreach ($childs as $child) {
             $text2 = $child['text'];
-            $children->title = substr(str_replace('"', "", $text2),5);
+            $children->title = substr($text2,5);
+            $testValue = $children->title;
+            // $children->title = str_replace('"', '',$children->title);
+            echo $children->title.replaceAll('\\\"', '');
+            // echo $testValue.toString().replaceAll("\"", "");
             echo "$children->title";
 
             $children->procon = substr($text2, 0,3);
