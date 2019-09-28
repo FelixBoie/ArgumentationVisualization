@@ -3,6 +3,10 @@ error_reporting(0);
 $question_url = "https://www.kialo.com/2629";
 $level = 0;
 $argObj = [];
+$procon = 0;
+$score = 0;
+$reference = 0;
+$calculatedScore = 0;
 
 $parts = explode("-",$question_url);
 //break the string up around the "/" character in $mystring
@@ -17,12 +21,10 @@ $mystring = end($parts);
 echo $mystring;
 
 echo "<br><br>";
-$argObj2 = json_decode(json_encode(runArgument($question_url, $dependecy, $level, $argNr)));
-echo $argObj2;
+$argObj2 = json_decode(runArgument($question_url, $procon, $score, $reference, $calculatedScore));
+echo json_encode($argObj2);
 
-echo "$obj";
-
-function runArgument($question_url, $dependecy, $level, $argNr) {
+function runArgument($question_url, $procon, $score, $reference, $calculatedScore) {
     $data = file_get_contents($question_url);
 
     // short version of same regex
@@ -35,31 +37,30 @@ function runArgument($question_url, $dependecy, $level, $argNr) {
 
     $decode = json_decode($json, true);
 
-    $arguments = $decode['mainEntity']['suggestedAnswer'];
+    
     $argObj->title = $decode['mainEntity']['text'];
     $argObj->answerCount = $decode['mainEntity']['answerCount'];
+    $argObj->procon = $procon;
+    $argObj->score = $score;
+    $argObj->reference = $reference;
+    $argObj->calculatedScore = $calculatedScore;
 
-    // if (sizeOf($arguments) == 0) {
-    //     return $myObj;
-    // }
+
+    $arguments = $decode['mainEntity']['suggestedAnswer'];
     $outerChild = []; 
     $argNr = 0;
     foreach ($arguments as $argument) {
         $text = $argument['text'];
-        $myObj->title = substr($text,5);
-        $myObj->procon = substr($text, 0,3);
-        $myObj->score = $argument['upvoteCount'];
-        $myObj->reference = substr(explode('active=', $argument['url'], 2)[1],1);
-        $myObj->answerCount = sizeOf($childs);
-        $myObj->calculatedScore = 0;
-        $myObj->mined = 0;
-        $outerChild[$argNr] = json_decode(json_encode(runArgument("https://www.kialo.com/$myObj->reference", $dependecy, $level, $argNr)));
-        $myObj->childs = $outerChild;
+        $procon_inner = substr($text, 0,3);
+        $score_inner = $argument['upvoteCount'];
+        $reference_inner = substr(explode('active=', $argument['url'], 2)[1],1);
+        $calculatedScore_inner = 0;
+        $outerChild[$argNr] = runArgument("https://www.kialo.com/$reference_inner", $procon_inner, $score_inner, $reference_inner, $calculatedScore_inner);
+        // echo json_encode($outerChild[$argNr]);
         $argNr++;
     }
-    $argObj->childs = json_decode(json_encode($myObj));
-    echo json_encode($argObj);
-    echo "<br>";
+    $argObj->childs = json_decode(json_encode($outerChild));
+    // echo json_encode($argObj);
     return json_decode(json_encode($argObj));   
 }
 ?>
