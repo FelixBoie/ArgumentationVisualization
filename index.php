@@ -63,13 +63,8 @@ function runArgument($question_url, $dependecy, $level, $argNr) {
         $int = 0;
         foreach ($childs as $child) {
             $text2 = $child['text'];
-            $children->title = substr($text2,5);
+            $children->title = bin2hex(substr($text2,5));
             $testValue = $children->title;
-            // $children->title = str_replace('"', '',$children->title);
-            echo $children->title.replaceAll('\\\"', '');
-            // echo $testValue.toString().replaceAll("\"", "");
-            echo "$children->title";
-
             $children->procon = substr($text2, 0,3);
             $children->score = $child['upvoteCount'];
             $children->answerCount = $child['answerCount'];
@@ -81,10 +76,9 @@ function runArgument($question_url, $dependecy, $level, $argNr) {
 
         // echo json_encode($childinner);
         $myObj->child = $childinner;
-        // echo json_encode($myObj);
-        echo "<br>";
         
-        // echo json_encode($myObj);
+        
+        echo json_encode($myObj);
         // $myObj->child[] = $children;
         // $myObj->child[] = $children;
 

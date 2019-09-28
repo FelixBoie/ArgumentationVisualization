@@ -2,6 +2,7 @@
 error_reporting(0);
 $question_url = "https://www.kialo.com/2629";
 $level = 0;
+$argObj = [];
 
 $parts = explode("-",$question_url);
 //break the string up around the "/" character in $mystring
@@ -16,7 +17,7 @@ $mystring = end($parts);
 echo $mystring;
 
 echo "<br><br>";
-$obj = runArgument($question_url, $dependecy, $level, $argNr);
+runArgument($question_url, $dependecy, $level, $argNr);
 
 echo "$obj";
 
@@ -34,24 +35,23 @@ function runArgument($question_url, $dependecy, $level, $argNr) {
     $decode = json_decode($json, true);
 
     $arguments = $decode['mainEntity']['suggestedAnswer'];
-
-    if (sizeOf($arguments) == 0) {
-        return $myObj;
-    }
-
+    
+    // if (sizeOf($arguments) == 0) {
+    //     return $myObj;
+    // }
+    $outerChild = []; 
+    $argNr = 0;
     foreach ($arguments as $argument) {
-        $argNr++;
-        $int = 0;
+        
         $text = $argument['text'];
         $myObj->title = substr($text,5);
         $myObj->procon = substr($text, 0,3);
         $myObj->score = $argument['upvoteCount'];
         $myObj->reference = substr(explode('active=', $argument['url'], 2)[1],1);
-        $myObj->answerCount - 
-        $nextSite = $myObj->reference;
-        // echo json_encode($myObj);
-        // echo "<br>";
-        
+        $myObj->answerCount = sizeOf($childs);
+        $myObj->calculatedScore = 0;
+        $myObj->mined = 0;
+
         $question_url2 = "https://www.kialo.com/$myObj->reference";
         $data = file_get_contents($question_url2);
         $pattern = '{<script id="metadata-qapage" type="application/ld.json" data-react-helmet="true">(.*)</script>}';
@@ -59,12 +59,29 @@ function runArgument($question_url, $dependecy, $level, $argNr) {
         $json = $matches[1][0];
         $decode = json_decode($json, true);
         $childs = $decode['mainEntity']['suggestedAnswer'];
+        $myObj->answerCount = sizeOf($childs);
+        $childinner = []; 
+        $int = 0;
         foreach ($childs as $child) {
-            $myObj->arg[]= runArgument("https://www.kialo.com/$nextSite", $dependecy, $level++ , $argNr);
+            $text2 = $child['text'];
+            $children->title = bin2hex(substr($text2,5));
+            $children->procon = substr($text2, 0,3);
+            $children->score = $child['upvoteCount'];
+            $children->reference = substr(explode('active=', $child['url'], 2)[1],1);
+            $children->answerCount = $child['answerCount'];
+            $children->calculatedScore = 0;
+            $children->mined = 0;
+            $childinner[$int] = json_decode(json_encode($children));
+            $int++;
         }
-        echo json_encode($myObj);
+        $myObj->childs = $childinner;
+        $outerChild[$argNr] = json_decode(json_encode($myObj));
+        // echo json_encode($outerChild[0]);
         echo "<br>";
+        $argNr++;
     }
+    $argObj->childs = $outerChild;
+    echo json_encode($argObj);
     
 }
 
