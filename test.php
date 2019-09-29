@@ -21,7 +21,7 @@ $mystring = end($parts);
 echo $mystring;
 
 echo "<br><br>";
-$argObj2 = json_decode(runArgument($question_url, $procon, $score, $reference, $calculatedScore));
+$argObj2 = runArgument($question_url, $procon, $score, $reference, $calculatedScore);
 echo json_encode($argObj2);
 
 function runArgument($question_url, $procon, $score, $reference, $calculatedScore) {
@@ -44,7 +44,7 @@ function runArgument($question_url, $procon, $score, $reference, $calculatedScor
     $argObj->score = $score;
     $argObj->reference = $reference;
     $argObj->calculatedScore = $calculatedScore;
-
+    echo json_encode($argObj->title);
 
     $arguments = $decode['mainEntity']['suggestedAnswer'];
     $outerChild = []; 
@@ -60,7 +60,10 @@ function runArgument($question_url, $procon, $score, $reference, $calculatedScor
         $argNr++;
     }
     $argObj->childs = json_decode(json_encode($outerChild));
-    // echo json_encode($argObj);
+    echo "<br>";
+    echo json_encode($argObj);
+    echo "<br>";
+    echo "<br>";
     return json_decode(json_encode($argObj));   
 }
 ?>
