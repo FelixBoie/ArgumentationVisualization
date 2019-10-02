@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+#chartdiv {
+  width: 100%;
+  height: 600px;
+}
+</style>
+  </head>
+<body translate="no">
+<script src="//www.amcharts.com/lib/4/core.js"></script>
+<script src="//www.amcharts.com/lib/4/charts.js"></script>
+<script src="//www.amcharts.com/lib/4/themes/animated.js"></script>
+<script src="//www.amcharts.com/lib/4/plugins/forceDirected.js"></script>
+<div id="chartdiv"></div>
+
+  <script id="rendered-js">
+      /**
+ * ---------------------------------------
+ * This demo was created using amCharts 4.
+ *
+ * For more information visit:
+ * https://www.amcharts.com/
+ *
+ * Documentation is available at:
+ * https://www.amcharts.com/docs/v4/
+ * ---------------------------------------
+ */
+
+am4core.useTheme(am4themes_animated);
+
+var chart = am4core.create("chartdiv", am4plugins_forceDirected.ForceDirectedTree);
+var series = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries());
+
+chart.data = [
+{
+  name: "Core",
+  children: [
+  {
+    name: "First",
+    children: [
+    { name: "A1", value: 100, description: "A1 Description", color:"red" },
+    { name: "A2", value: 60, description: "A1 Description", color:"red" }] },
+
+
+
+  {
+    name: "Fourth", value: 100,
+    children: [
+    { name: "D1", value: 415, description: "A1 Description" },
+    { name: "D2", value: 148, description: "A1 Description" },
+    { name: "D3", value: 89, description: "A1 Description" }] },
+
+
+  {
+    name: "Fifth",
+    children: [
+    {
+      name: "E1",
+      children: [
+      { name: "EE1", value: 33, description: "A1 Description" },
+      { name: "EE2", value: 40, description: "A1 Description" },
+      { name: "EE3", value: 89, description: "A1 Description" }] },
+
+
+    {
+      name: "E2",
+      value: 148, description: "A1 Description" }] }] }];
+
+
+
+
+
+
+
+series.dataFields.color = "color";
+series.dataFields.value = "value";
+series.dataFields.description = "description";
+series.dataFields.name = "name";
+series.dataFields.children = "children";
+series.nodes.template.tooltipText = "{name}:{value}:{description}";
+series.nodes.template.fillOpacity = 1;
+
+series.nodes.template.label.text = "{name}";
+series.fontSize = 10;
+series.minRadius = 15;
+
+    </script>
+</body>
+</html>
