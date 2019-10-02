@@ -1,7 +1,6 @@
 <?php
 error_reporting(0);
-// $question_url = "https://www.kialo.com/2629";    
-$question_url = "https://www.kialo.com/2629";
+$question_url = "https://www.kialo.com/2629.684";
 $level = 0;
 $argObj = [];
 $procon = 0;
@@ -27,8 +26,7 @@ echo json_encode($argObj2);
 
 function runArgument($question_url, $procon, $score, $reference, $calculatedScore) {
     $data = file_get_contents($question_url);
-    // echo $data;
-    // echo "<br>";
+
     // short version of same regex
     $pattern = '{<script id="metadata-qapage" type="application/ld.json" data-react-helmet="true">(.*)</script>}';
 
@@ -38,8 +36,8 @@ function runArgument($question_url, $procon, $score, $reference, $calculatedScor
     $json = $matches[1][0];
 
     $decode = json_decode($json, true);
+
     $argObj->title = $decode['mainEntity']['text'];
-    echo $argObj->title;
     $argObj->answerCount = $decode['mainEntity']['answerCount'];
     $argObj->procon = $procon;
     $argObj->score = $score;
@@ -55,13 +53,13 @@ function runArgument($question_url, $procon, $score, $reference, $calculatedScor
         $score_inner = $argument['upvoteCount'];
         $reference_inner = substr(explode('active=', $argument['url'], 2)[1],1);
         $calculatedScore_inner = 0;
-        $outerChild[$argNr] = runArgument("https://www.kialo.com/$reference_inner", $procon_inner, $score_inner, $reference_inner, $calculatedScore_inner);
+        $outerChild[$argNr] = runArgument("https://www.kialo.com/".$reference_inner, $procon_inner, $score_inner, $reference_inner, $calculatedScore_inner);
         // echo json_encode($outerChild[$argNr]);
         $argNr++;
     }
     $argObj->childs = json_decode(json_encode($outerChild));
     echo "<br>";
-    // echo json_encode($argObj);
+    echo json_encode($argObj);
     return json_decode(json_encode($argObj));   
 }
 ?>
