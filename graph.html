@@ -38,40 +38,43 @@ am4core.useTheme(am4themes_animated);
 var chart = am4core.create("chartdiv", am4plugins_forceDirected.ForceDirectedTree);
 var series = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries());
 
-chart.data = [
-{
-  name: "Core",
-  children: [
-  {
-    name: "First",
-    children: [
-    { name: "A1", value: 100, description: "A1 Description", color:"red" },
-    { name: "A2", value: 60, description: "A1 Description", color:"red" }] },
+// chart.data = [
+// {
+//   name: "Core",
+//   children: [
+//   {
+//     name: "First",
+//     children: [
+//     { name: "A1", value: 100, description: "A1 Description", color:"red" },
+//     { name: "A2", value: 60, description: "A1 Description", color:"red" }] },
 
 
 
-  {
-    name: "Fourth", value: 100,
-    children: [
-    { name: "D1", value: 415, description: "A1 Description" },
-    { name: "D2", value: 148, description: "A1 Description" },
-    { name: "D3", value: 89, description: "A1 Description" }] },
+//   {
+//     name: "Fourth", value: 100,
+//     children: [
+//     { name: "D1", value: 415, description: "A1 Description" },
+//     { name: "D2", value: 148, description: "A1 Description" },
+//     { name: "D3", value: 89, description: "A1 Description" }] },
 
 
-  {
-    name: "Fifth",
-    children: [
-    {
-      name: "E1",
-      children: [
-      { name: "EE1", value: 33, description: "A1 Description" },
-      { name: "EE2", value: 40, description: "A1 Description" },
-      { name: "EE3", value: 89, description: "A1 Description" }] },
+//   {
+//     name: "Fifth",
+//     children: [
+//     {
+//       name: "E1",
+//       children: [
+//       { name: "EE1", value: 33, description: "A1 Description" },
+//       { name: "EE2", value: 40, description: "A1 Description" },
+//       { name: "EE3", value: 89, description: "A1 Description" }] },
 
 
-    {
-      name: "E2",
-      value: 148, description: "A1 Description" }] }] }];
+//     {
+//       name: "E2",
+//       value: 148, description: "A1 Description" }] }] }];
+
+
+series.dataSource.url = "test.json";
 
 
 
@@ -84,10 +87,10 @@ series.dataFields.value = "score";
 series.dataFields.description = "description";
 series.dataFields.name = "title";
 series.dataFields.children = "childs";
-series.nodes.template.tooltipText = "{name}:{value}:{description}";
+series.nodes.template.tooltipText = "{title}";
 series.nodes.template.fillOpacity = 1;
 
-series.nodes.template.label.text = "{name}";
+series.nodes.template.label.text = "{score}";
 series.fontSize = 10;
 series.minRadius = 15;
 

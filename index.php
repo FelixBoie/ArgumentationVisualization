@@ -50,7 +50,7 @@ function runArgument($question_url, $dependecy, $level, $argNr) {
         $myObj->tile = str_replace('"', '', html_entity_decode($argument['text']));
         // $myObj->title = substr($text,5);
         $myObj->procon = substr($text, 0,3);
-        if($myObj->procon == "pro") {
+        if($myObj->procon == "Pro") {
             $myObj->color = "#32bf57";
         }
         else {
@@ -77,7 +77,7 @@ function runArgument($question_url, $dependecy, $level, $argNr) {
             $children->title = str_replace('"', '', html_entity_decode($child['text']));
             // $children->title = substr($text2,5);
             $children->procon = substr($text2, 0,3);
-            if($children->procon == "pro") {
+            if($children->procon == "Pro") {
                 $children->color = "#32bf57";
             }
             else {

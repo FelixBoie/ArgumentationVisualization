@@ -16,88 +16,84 @@ $argNr = 0;
 
 $argObj2 = runArgument($url, $dependency, $level, $argNr);
 
+$fp = fopen('test.json', 'w');
+fwrite($fp, json_decode(json_encode($argObj2)));
+fclose($fp);
 
-function runArgument($question_url, $dependency, $level, $argNr) {
-    $data = file_get_contents($question_url);
+function runArgument($question_url, $dependecy, $level, $argNr) {
+  $data = file_get_contents($question_url);
 
-    // short version of same regex
-    $pattern = '{<script id="metadata-qapage" type="application/ld.json" data-react-helmet="true">(.*)</script>}';
+  // short version of same regex
+  $pattern = '{<script id="metadata-qapage" type="application/ld.json" data-react-helmet="true">(.*)</script>}';
 
-    // $matchcount = preg_match_all($pattern_long, $data, $matches);
-    $matchcount = preg_match_all($pattern, $data, $matches);
+  // $matchcount = preg_match_all($pattern_long, $data, $matches);
+  $matchcount = preg_match_all($pattern, $data, $matches);
+  $json = $matches[1][0];
 
-    $json = $matches[1][0];
+  $decode = json_decode($json, true);
 
-    $decode = json_decode($json, true);
+  $arguments = $decode['mainEntity']['suggestedAnswer'];
+  $argObj->title = $decode['mainEntity']['text'];
+  $argObj->answerCount = $decode['mainEntity']['answerCount'];
 
-    $arguments = $decode['mainEntity']['suggestedAnswer'];
-    $argObj->title = $decode['mainEntity']['text'];
-    $argObj->answerCount = $decode['mainEntity']['answerCount'];
+  // if (sizeOf($arguments) == 0) {
+  //     return $myObj;
+  // }
+  $outerChild = []; 
+  $argNr = 0;
+  foreach ($arguments as $argument) {
+      
+      $text = $argument['text'];
+      $myObj->tile = str_replace('"', '', html_entity_decode($argument['text']));
+      // $myObj->title = substr($text,5);
+      $myObj->procon = substr($text, 0,3);
+      if($myObj->procon == "Pro") {
+          $myObj->color = "#32bf57";
+      }
+      else {
+          $myObj->color = "#d13636";
+      }
+      $myObj->score = $argument['upvoteCount'];
+      $myObj->reference = substr(explode('active=', $argument['url'], 2)[1],1);
+      $myObj->answerCount = sizeOf($childs);
+      $myObj->calculatedScore = 0;
+      $myObj->mined = 0;
 
-    // if (sizeOf($arguments) == 0) {
-    //     return $myObj;
-    // }
-    $outerChild = [];
-    $argNr = 0;
-    foreach ($arguments as $argument) {
-
-        $text = $argument['text'];
-        $myObj->title = substr($text,5);
-        $myObj->procon = substr($text, 0,3);
-        $myObj->score = $argument['upvoteCount'];
-        $myObj->reference = substr(explode('active=', $argument['url'], 2)[1],1);
-        $myObj->answerCount = sizeOf($childs);
-        $myObj->calculatedScore = 0;
-        $myObj->mined = 0;
-
-
-        $question_url2 = "https://www.kialo.com/$myObj->reference";
-        $data = file_get_contents($question_url2);
-        $pattern = '{<script id="metadata-qapage" type="application/ld.json" data-react-helmet="true">(.*)</script>}';
-        $matchcount = preg_match_all($pattern, $data, $matches);
-        $json = $matches[1][0];
-        $decode = json_decode($json, true);
-        $childs = $decode['mainEntity']['suggestedAnswer'];
-        $myObj->answerCount = sizeOf($childs);
-        $childinner = [];
-        $int = 0;
-        foreach ($childs as $child) {
-            $text2 = $child['text'];
-            $title2 = str_replace('"', '', html_entity_decode($child['text']));
-
-            // $children->title = bin2hex(substr($text2,5));
-            $children->title = substr($title2,5);
-            $children->procon = substr($text2, 0,3);
-            $children->score = $child['upvoteCount'];
-            $children->reference = substr(explode('active=', $child['url'], 2)[1],1);
-            $children->answerCount = $child['answerCount'];
-            $children->calculatedScore = 0;
-            $children->mined = 0;
-
-
-
-
+      $question_url2 = "https://www.kialo.com/$myObj->reference";
+      $data = file_get_contents($question_url2);
+      $pattern = '{<script id="metadata-qapage" type="application/ld.json" data-react-helmet="true">(.*)</script>}';
+      $matchcount = preg_match_all($pattern, $data, $matches);
+      $json = $matches[1][0];
+      $decode = json_decode($json, true);
+      $childs = $decode['mainEntity']['suggestedAnswer'];
+      $myObj->answerCount = sizeOf($childs);
+      $childinner = []; 
+      $int = 0;
+      foreach ($childs as $child) {
+          $text2 = $child['text'];
+          $children->title = str_replace('"', '', html_entity_decode($child['text']));
+          // $children->title = substr($text2,5);
+          $children->procon = substr($text2, 0,3);
+          if($children->procon == "Pro") {
+              $children->color = "#32bf57";
+          }
+          else {
+              $children->color = "#d13636";
+          }
+          $children->score = $child['upvoteCount'];
+          $children->reference = substr(explode('active=', $child['url'], 2)[1],1);
+          $children->answerCount = $child['answerCount'];
+          $children->calculatedScore = 0;
+          $children->mined = 0;
           $childinner[$int] = json_decode(json_encode($children));
-            $int++;
-
-
-
-
-
-
-        }
-        $myObj->childs = $childinner;
-
-
-
-
-        $outerChild[$argNr] = json_decode(json_encode($myObj));
-        // echo json_encode($outerChild[0]);
-
-        $argNr++;
-    }
-    $argObj->childs = $outerChild;
-    return json_encode($argObj);
+          $int++;
+      }
+      $myObj->childs = $childinner;
+      $outerChild[$argNr] = json_decode(json_encode($myObj));
+      $argNr++;
+  }
+  $argObj->childs = $outerChild;
+  return json_encode($argObj);
 }
 
 
@@ -214,56 +210,25 @@ am4core.useTheme(am4themes_animated);
 var chart = am4core.create("chartdiv", am4plugins_forceDirected.ForceDirectedTree);
 var series = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries());
 
-chart.data = [
-{
-  name: "Core",
-  childs: [
-  {
-    name: "First",
-    childs: [
-    { name: "A1", value: 100, description: "A1 Description", color:"red" },
-    { name: "A2", value: 60, description: "A1 Description", color:"red" }] },
+// chart.data = [{
+//   "series": [{
+//     "dataSource": {
+//       "url": "test.json"
+//     }
+//   }]
+// }];
 
-
-
-  {
-    name: "Fourth", value: 100,
-    childs: [
-    { name: "D1", value: 415, description: "A1 Description" },
-    { name: "D2", value: 148, description: "A1 Description" },
-    { name: "D3", value: 89, description: "A1 Description" }] },
-
-
-  {
-    name: "Fifth",
-    childs: [
-    {
-      name: "E1",
-      childs: [
-      { name: "EE1", value: 33, description: "A1 Description" },
-      { name: "EE2", value: 40, description: "A1 Description" },
-      { name: "EE3", value: 89, description: "A1 Description" }] },
-
-
-    {
-      name: "E2",
-      value: 148, description: "A1 Description" }] }] }];
-
-
-
-
-
-
+series.dataSource.url = "test.json";
 
 series.dataFields.color = "color";
-series.dataFields.value = "value";
+series.dataFields.value = "score";
 series.dataFields.description = "description";
-series.dataFields.name = "name";
+series.dataFields.name = "title";
 series.dataFields.children = "childs";
-series.nodes.template.tooltipText = "{name}:{value}:{description}";
+series.nodes.template.tooltipText = "{title}";
 series.nodes.template.fillOpacity = 1;
 
-series.nodes.template.label.text = "{name}";
+series.nodes.template.label.text = "{score}";
 series.fontSize = 10;
 series.minRadius = 15;
 
