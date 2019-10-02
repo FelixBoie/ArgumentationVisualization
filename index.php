@@ -47,8 +47,15 @@ function runArgument($question_url, $dependecy, $level, $argNr) {
     foreach ($arguments as $argument) {
         
         $text = $argument['text'];
-        $myObj->title = substr($text,5);
+        $myObj->tile = str_replace('"', '', html_entity_decode($argument['text']));
+        // $myObj->title = substr($text,5);
         $myObj->procon = substr($text, 0,3);
+        if($myObj->procon == "pro") {
+            $myObj->color = "#32bf57";
+        }
+        else {
+            $myObj->color = "#d13636";
+        }
         $myObj->score = $argument['upvoteCount'];
         $myObj->reference = substr(explode('active=', $argument['url'], 2)[1],1);
         $myObj->answerCount = sizeOf($childs);
@@ -67,8 +74,15 @@ function runArgument($question_url, $dependecy, $level, $argNr) {
         $int = 0;
         foreach ($childs as $child) {
             $text2 = $child['text'];
-            $children->title = bin2hex(substr($text2,5));
+            $children->title = str_replace('"', '', html_entity_decode($child['text']));
+            // $children->title = substr($text2,5);
             $children->procon = substr($text2, 0,3);
+            if($children->procon == "pro") {
+                $children->color = "#32bf57";
+            }
+            else {
+                $children->color = "#d13636";
+            }
             $children->score = $child['upvoteCount'];
             $children->reference = substr(explode('active=', $child['url'], 2)[1],1);
             $children->answerCount = $child['answerCount'];
