@@ -218,7 +218,7 @@ var series = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries(
 //   }]
 // }];
 
-series.dataSource.url = "test.json";
+series.dataSource.url = "argument.json";
 
 series.dataFields.color = "color";
 series.dataFields.value = "score";
