@@ -1,7 +1,7 @@
 <?php
 error_reporting(0);
 // $question_url = "https://www.kialo.com/2629";    
-$question_url = "https://www.kialo.com/27064";
+$question_url = "https://www.kialo.com/30673";
 ini_set('max_execution_time', 3000);
 $level = 0;
 $argObj = [];
@@ -29,7 +29,13 @@ echo $mystring;
 
 echo "<br><br>";
 $argObj2 = runArgument($question_url, $procon, $score, $reference, $calculatedScore, $level, $maxLevel);
-echo json_encode($argObj2);
+
+$argObj2->color = "#292929";
+$argObj2->score = 20;
+
+$fp = fopen('argument.json', 'w');
+fwrite($fp, json_encode($argObj2));
+fclose($fp);
 
 function runArgument($question_url, $procon, $score, $reference, $calculatedScore, $level, $maxLevel) {
     $level++;
@@ -42,10 +48,7 @@ function runArgument($question_url, $procon, $score, $reference, $calculatedScor
     $json = $matches[1][0];
 
     $decode = json_decode($json, true);
-    if ($getTitle == 0) {
-        $OGTitle = str_replace('"', '', html_entity_decode($decode['mainEntity']['text']));
-        $getTitle = 1;
-    }
+    
     $argObj->title = str_replace('"', '', html_entity_decode($decode['mainEntity']['text']));
     $argObj->answerCount = $decode['mainEntity']['answerCount'];
     $argObj->procon = $procon;
