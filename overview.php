@@ -181,7 +181,7 @@ function runArgument($question_url, $dependecy, $level, $argNr) {
             <div id="chartdiv"></div>
             <br>
             <?php
-            echo $argObj2;
+            var_dump(file_get_contents("argument.json"));
 
 echo "$obj";
 ?></div>
@@ -210,13 +210,6 @@ am4core.useTheme(am4themes_animated);
 var chart = am4core.create("chartdiv", am4plugins_forceDirected.ForceDirectedTree);
 var series = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries());
 
-// chart.data = [{
-//   "series": [{
-//     "dataSource": {
-//       "url": "test.json"
-//     }
-//   }]
-// }];
 
 series.dataSource.url = "argument.json";
 
