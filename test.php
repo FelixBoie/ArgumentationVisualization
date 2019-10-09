@@ -8,7 +8,7 @@ $argObj = [];
 $procon = 0;
 $score = 0;
 $reference = 0;
-$calculatedScore = 0;
+$calculatedScore = -1000;
 $getTitle = 0;
 $count = 0;
 $level = 0;
@@ -32,6 +32,8 @@ $argObj2 = runArgument($question_url, $procon, $score, $reference, $calculatedSc
 
 $argObj2->color = "#292929";
 $argObj2->score = 20;
+
+$argObj3 = defArgument(json_encode($argObj2));
 
 $fp = fopen('argument.json', 'w');
 fwrite($fp, json_encode($argObj2));
@@ -72,7 +74,7 @@ function runArgument($question_url, $procon, $score, $reference, $calculatedScor
             
             $score_inner = $argument['upvoteCount'];
             $reference_inner = substr(explode('active=', $argument['url'], 2)[1],1);
-            $calculatedScore_inner = 0;
+            $calculatedScore_inner = -1000;
             $outerChild[] = runArgument("https://www.kialo.com/$reference_inner", $procon_inner, $score_inner, $reference_inner, $calculatedScore_inner, $level, $maxLevel);
             $argNr++;
         }
@@ -84,5 +86,17 @@ function runArgument($question_url, $procon, $score, $reference, $calculatedScor
     
     // echo json_encode($argObj);
     // return json_decode(json_encode($argObj));   
+}
+
+
+function defArgument($argument) {
+    var_dump(json_decode($argument->ModuleAccountInfo));
+    var_dump($argument);
+    if ($argument->answerCount == 0) {
+        echo "HOI";
+        $argument->calculatedScore = 1;
+        return $argument;
+    }
+    return $argument;
 }
 ?>
