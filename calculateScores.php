@@ -16,7 +16,7 @@ print_r($json_data);
 function defArgument($array) {
 $calculatedScore = 0;
 if ($array['calculatedScore'] > -1000) {
-    return $array['claculatedScore'];
+    return $array['calculatedScore'];
 }
 elseif (empty($array['childs'])) {
     $array['calculatedScore'] = 1;
@@ -24,8 +24,8 @@ elseif (empty($array['childs'])) {
 }
 else {
     
-    //for ($i = 0; $i < $array['calculatedScore']; $i++) {
-    for ($i = 0; $i < 20; $i++) {
+    for ($i = 0; $i < $array['calculatedScore']; $i++) {
+    
         $calculatedScore += defArgument($array['childs'][$i]) * $array['childs'][$i]['score'];
     }
     $array['calculatedScore'] = $calculatedScore;
