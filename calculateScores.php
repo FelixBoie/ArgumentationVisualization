@@ -44,9 +44,17 @@ function defArgument(&$array) {
 	    // loop over all children in the next level
 		$calculatedScore = 0;
 		$pathCount = 0;
+		$proConSign = 0; // if pro, then 1 if contra then -1
 	    for ($i = 0; $i < $array['answerCount']; $i++) {
+	    	// negative score for counter arguments
+	    	if($array['childs'][$i]['procon']=='Pro'){
+	    		$proConSign = 1;
+	    	} else {
+	    		$proConSign = -1;
+	    	}
+	    	
 	    	//order is important, first the calculatedScore needs to run, then the count.
-	        $calculatedScore += defArgument($array['childs'][$i]) * $array['childs'][$i]['score']/100; // needs to be divided by 100, as scores should be between -1 and 1
+	        $calculatedScore += defArgument($array['childs'][$i]) * $proConSign * $array['childs'][$i]['score']/100; // needs to be divided by 100, as scores should be between -1 and 1
 	        $pathCount += $array['childs'][$i]['pathCount'];
 	        
 	    }
