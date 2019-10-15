@@ -12,7 +12,8 @@ print($json_data['title']);
 echo '<br/>';
 
 //Start with the main Argument
-defArgument($json_data);
+defArgument($json_data); // calculates scores, pahts and acceptabilityDegree
+calculateRelationToMainArgument_pro($json_data); // calculates if argument is pro or con against the main argument
 
 // show final json file
 print_r($json_data);
@@ -22,16 +23,10 @@ function defArgument(&$array) {
 	
 	if ($array['calculatedScore'] > -1000) {
 		// aguments calculatedScore and path have alreay been defined
-		print("run part1");
-		echo '<br/>';
-		
     	return $array['calculatedScore'];
 	}
 	elseif (empty($array['childs'])) {
-		// argument is at the most outer level, calculatedScore, path and acceptabilityDegree are set to 1. 
-		print("run part2");
-		echo '<br/>';
-		
+		// argument is at the most outer level, calculatedScore, path and acceptabilityDegree are set to 1. 		
 	    $array['calculatedScore'] = 1;
 	    $array['pathCount'] = 1;
 	    $array['acceptabilityDegree'] = 1;
@@ -39,8 +34,6 @@ function defArgument(&$array) {
 	}
 	else {
 		// argument needs to be defined, and is not on the most outer level
-		print("run part3");
-		echo '<br/>';
 	    // loop over all children in the next level
 		$calculatedScore = 0;
 		$pathCount = 0;
@@ -63,4 +56,42 @@ function defArgument(&$array) {
 	    $array['acceptabilityDegree'] = 1 + $calculatedScore/$pathCount;
 	    return $calculatedScore;
 	}
+}
+
+
+//put in here the main argument
+function calculateRelationToMainArgument_pro(&$array) {
+	if (empty($array['childs'])){
+		//should not do anything if there are no children
+	} else {
+		for ($i = 0; $i < $array['answerCount']; $i++) {
+			if ($array['childs'][$i]['procon'] == 'Pro'){
+				$array['childs'][$i]['procon_compardToMain'] = 'Pro';
+				calculateRelationToMainArgument_pro($array['childs'][$i]);
+				$array['childs'][$i]['color_toMain'] = "#32bf57";
+			} else {
+				$array['childs'][$i]['procon_compardToMain'] = 'Con';
+				calculateRelationToMainArgument_con($array['childs'][$i]);
+				$array['childs'][$i]['color_toMain'] = "#d13636";
+			}	
+		}
+	}
+}
+
+function calculateRelationToMainArgument_con(&$array) {
+	if (empty($array['childs'])){
+		//should not do anything if there are no children
+	} else {
+		for ($i = 0; $i < $array['answerCount']; $i++) {
+			if ($array['childs'][$i]['procon'] == 'Pro'){
+				$array['childs'][$i]['procon_compardToMain'] = 'Con';
+				calculateRelationToMainArgument_con($array['childs'][$i]);
+				$array['childs'][$i]['color_toMain'] = "#d13636";
+			} else {
+				$array['childs'][$i]['procon_compardToMain'] = 'Pro';
+				calculateRelationToMainArgument_pro($array['childs'][$i]);
+				$array['childs'][$i]['color_toMain'] = "#32bf57";
+			}
+		}
+	}	
 }
