@@ -13,8 +13,11 @@ $json_data = json_decode($json,true);
 //Start with the main Argument
 defArgument($json_data); // calculates scores, pahts and acceptabilityDegree
 calculateRelationToMainArgument_pro($json_data); // calculates if argument is pro or con against the main argument
-
-// show final json file
+// echo(json_encode($json_data));
+// // show final json file
+$fp = fopen('argument.json', 'w');
+fwrite($fp, json_encode($json_data));
+fclose($fp);
 
 header("location: graph.html");
 
@@ -51,7 +54,8 @@ function defArgument(&$array) {
 	        $pathCount += $array['childs'][$i]['pathCount'];
 	        
 	    }
-	    $array['calculatedScore'] = $calculatedScore;
+		$array['calculatedScore'] = $calculatedScore;
+		$array['viewableScore'] = 50* ($calculatedScore + 7);
 	    $array['pathCount'] = $pathCount;
 	    $array['acceptabilityDegree'] = 1 + $calculatedScore/$pathCount;
 	    return $calculatedScore;
