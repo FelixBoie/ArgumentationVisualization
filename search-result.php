@@ -61,7 +61,7 @@ $question = $_POST['question'];
               $headline = substr($item->htmlTitle, 0, -7);
 
               ?>
-              <a href="overview.php?url=<?php echo $item->link ?>&title=<?php echo $headline ?>" class="search-result w-inline-block">
+              <a href="mineData.php?url=<?php echo $item->link ?>&title=<?php echo $headline ?>" class="search-result w-inline-block">
             <div class="columns-2 w-row">
               <div class="w-col w-col-10 w-col-small-10 w-col-tiny-10">
                 <h3 class="heading-7 result"><?php echo $headline ?></h3>

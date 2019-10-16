@@ -1,7 +1,7 @@
 <?php
 error_reporting(0);
 // $question_url = "https://www.kialo.com/2629";    
-$question_url = "https://www.kialo.com/23956";
+$question_url = $_GET["url"];
 ini_set('max_execution_time', 3000);
 $level = 0;
 $argObj = [];
@@ -28,20 +28,18 @@ $OGTitle = "null";
 $mystring = end($parts);
 //grab the first part
 
-echo $mystring;
-
-echo "<br><br>";
 $argObj2 = runArgument($question_url, $procon, $procon_compardToMain, $score, $reference, $calculatedScore, $pathCount, $acceptabilityDegree, $level, $maxLevel);
 
 $argObj2->color = "#292929";
 $argObj2->color_toMain = "#292929";
 $argObj2->score = 20;
 
-$argObj3 = defArgument(json_encode($argObj2));
+// $argObj3 = defArgument(json_encode($argObj2));
 
 $fp = fopen('argument.json', 'w');
 fwrite($fp, json_encode($argObj2));
 fclose($fp);
+header("Location: calculateScores.php");
 
 function runArgument($question_url, $procon, $procon_compardToMain, $score, $reference, $calculatedScore, $pathCount, $acceptabilityDegree, $level, $maxLevel) {
     $level++;
@@ -50,7 +48,6 @@ function runArgument($question_url, $procon, $procon_compardToMain, $score, $ref
     $pattern = '{<script id="metadata-qapage" type="application/ld.json" data-react-helmet="true">(.*)</script>}';
 
     $matchcount = preg_match_all($pattern, $data, $matches);
-    echo("<pre>\n");
     $json = $matches[1][0];
 
     $decode = json_decode($json, true);
@@ -91,22 +88,5 @@ function runArgument($question_url, $procon, $procon_compardToMain, $score, $ref
         $argObj->childs = json_decode(json_encode($outerChild));
     }
     return $argObj;
-
-
-    
-    // echo json_encode($argObj);
-    // return json_decode(json_encode($argObj));   
-}
-
-// I think this is no longer needed (Felix) ???
-function defArgument($argument) {
-    var_dump(json_decode($argument->ModuleAccountInfo));
-    var_dump($argument);
-    if ($argument->answerCount == 0) {
-        echo "HOI";
-        $argument->calculatedScore = 1;
-        return $argument;
-    }
-    return $argument;
 }
 ?>

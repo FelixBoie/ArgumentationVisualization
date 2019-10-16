@@ -210,7 +210,6 @@ am4core.useTheme(am4themes_animated);
 var chart = am4core.create("chartdiv", am4plugins_forceDirected.ForceDirectedTree);
 var series = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries());
 
-
 series.dataSource.url = "argument.json";
 
 series.dataFields.color = "color";

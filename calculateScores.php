@@ -8,15 +8,15 @@ $json_data = json_decode($json,true);
 
 
 //print main argument
-print($json_data['title']);
-echo '<br/>';
+// print($json_data['title']);
 
 //Start with the main Argument
 defArgument($json_data); // calculates scores, pahts and acceptabilityDegree
 calculateRelationToMainArgument_pro($json_data); // calculates if argument is pro or con against the main argument
 
 // show final json file
-print_r($json_data);
+
+header("location: graph.html");
 
 //Start the Function
 function defArgument(&$array) {
