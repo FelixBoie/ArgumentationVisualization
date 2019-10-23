@@ -74,7 +74,7 @@ function calculateRelationToMainArgument_pro(&$array) {
 			if ($array['childs'][$i]['procon'] == 'Pro'){
 				$array['childs'][$i]['procon_compardToMain'] = 'Pro';
 				calculateRelationToMainArgument_pro($array['childs'][$i]);
-				$array['childs'][$i]['color_toMain'] = "rgba(50,191,87,0.2)";
+				$array['childs'][$i]['color_toMain'] = "rgba(50,191,87,0.8)";
 			} else {
 				$array['childs'][$i]['procon_compardToMain'] = 'Con';
 				calculateRelationToMainArgument_con($array['childs'][$i]);
@@ -96,7 +96,7 @@ function calculateRelationToMainArgument_con(&$array) {
 			} else {
 				$array['childs'][$i]['procon_compardToMain'] = 'Pro';
 				calculateRelationToMainArgument_pro($array['childs'][$i]);
-				$array['childs'][$i]['color_toMain'] = "#32bf57";
+				$array['childs'][$i]['color_toMain'] = "rgba(50,191,87,0.8)";
 			}
 		}
 	}	
