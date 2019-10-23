@@ -32,7 +32,8 @@ function defArgument(&$array) {
 		// argument is at the most outer level, calculatedScore, path and acceptabilityDegree are set to 1. 		
 	    $array['calculatedScore'] = 1;
 	    $array['pathCount'] = 1;
-	    $array['acceptabilityDegree'] = 1;
+		$array['acceptabilityDegree'] = 1;
+		$array['viewableScore'] = pow(3, 4);
 	    return 1;
 	}
 	else {
@@ -55,9 +56,10 @@ function defArgument(&$array) {
 	        
 	    }
 		$array['calculatedScore'] = $calculatedScore;
-		$array['viewableScore'] = 50* ($calculatedScore + 7);
 	    $array['pathCount'] = $pathCount;
-	    $array['acceptabilityDegree'] = 1 + $calculatedScore/$pathCount;
+		$array['acceptabilityDegree'] = 1 + $calculatedScore/$pathCount;
+		$array['viewableScore'] = pow((1 + $calculatedScore/$pathCount)+2, 4);
+
 	    return $calculatedScore;
 	}
 }

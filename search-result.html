@@ -45,7 +45,7 @@ $question = $_POST['question'];
           </form>
 
         </div>
-        <div class="search-results">
+        <div id="search-results" class="search-results">
           <a href="#" class="search-result w-inline-block">
             <div class="columns-2 w-row">
               <div class="w-col w-col-10 w-col-small-10 w-col-tiny-10">
@@ -59,6 +59,10 @@ $question = $_POST['question'];
       </div>
       <div class="w-col w-col-2"></div>
     </div>
+  </div>
+  <div id="loader" class="loader">
+    <h2>Mining the data..</h2>
+    <img src="images/02_construction_.gif" alt="loader">
   </div>
   <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js" type="text/javascript" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script src="js/webflow.js" type="text/javascript"></script>

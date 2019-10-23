@@ -42,7 +42,7 @@ $question = $_POST['question'];
         <p class="white" style="margin-bottom:0px;">Showing Results for:</p>
 
         <h1 class="white" style="margin-bottom:10px;border-bottom:2px solid #efefef" ><?php echo $question ?></h1>
-        <div class="search-results">
+        <div id="search-results" class="search-results">
 
           <?php
           $search = ' ';
@@ -61,7 +61,7 @@ $question = $_POST['question'];
               $headline = substr($item->htmlTitle, 0, -7);
 
               ?>
-              <a href="mineData.php?url=<?php echo $item->link ?>&title=<?php echo $headline ?>" class="search-result w-inline-block">
+              <a  href="mineData.php?url=<?php echo $item->link ?>&title=<?php echo $headline ?>" class="search-result w-inline-block" onclick="load()">
             <div class="columns-2 w-row">
               <div class="w-col w-col-10 w-col-small-10 w-col-tiny-10">
                 <h3 class="heading-7 result"><?php echo $headline ?></h3>
@@ -84,8 +84,25 @@ $question = $_POST['question'];
       <div class="w-col w-col-2"></div>
     </div>
   </div>
+  <div id="loader" class="loader">
+    <h2>Mining the data..</h2>
+    <img src="images/02_construction_.gif" alt="loader">
+  </div>
   <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js" type="text/javascript" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script src="js/webflow.js" type="text/javascript"></script>
+  
+  <script>
+      // function myFunction() {
+      //   console.log("HOI");
+      //   document.getElementById("search-results").style.display = "None";
+      //   document.getElementById("loader").style.display = "block";
+      // }
+
+      function load(){
+        document.getElementById("search-results").style.display = "None";
+        document.getElementById("loader").style.display = "block";
+      }
+  </script>
   <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
 </body>
 </html>
