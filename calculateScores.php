@@ -19,7 +19,7 @@ $fp = fopen('argument.json', 'w');
 fwrite($fp, json_encode($json_data));
 fclose($fp);
 
-header("location: graph.html");
+header("location: analysis.php");
 
 //Start the Function
 function defArgument(&$array) {
