@@ -8,7 +8,7 @@ $json_data = json_decode($json,true);
 //Traverse array and get the data for students aged less than 20
 
 $title = $json_data['title'];
-$acceptabilityDegree = $json_data['acceptabilityDegree'];
+$acceptabilityDegree = number_format($json_data['acceptabilityDegree'],3);
 $percent = round((1 - ($acceptabilityDegree / 2))*100);
 
 
@@ -59,7 +59,7 @@ $percent = round((1 - ($acceptabilityDegree / 2))*100);
     </div>
   </div>
   <div class="score w-clearfix">
-    <div class="con" style="width:<?php echo $percent ?>%;"></div>
+    <div class="con" style="width:<?php echo $percent ?>;"></div>
   </div>
  
       <script src="//www.amcharts.com/lib/4/core.js"></script>
