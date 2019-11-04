@@ -38,11 +38,11 @@ $percent = round((1 - ($acceptabilityDegree / 2))*100);
       
       #chartdiv {
         width: 100%;
-        height: 80vh;
+        height: calc(100vh - 80px);
       }
       </style>
 </head>
-<body class="body-2">
+<body class="body-2" style="overflow: hidden;">
   <div class="header">
     <div class="w-row">
       <div class="w-col w-col-1"></div>
